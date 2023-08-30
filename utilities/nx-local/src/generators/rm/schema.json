@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "rm",
+  "title": "Remove package",
+  "description": "Removes a package from packages/ and calls remove-from-docs.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of package from /packages folder to be deleted",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "Which package would you like to remove?"
+    },
+    "areYouSure": {
+      "type": "boolean",
+      "description": "Destructive actions require confirmation",
+      "x-prompt": "Are you sure you want to delete this project?"
+    }
+  },
+  "required": ["name"]
+}

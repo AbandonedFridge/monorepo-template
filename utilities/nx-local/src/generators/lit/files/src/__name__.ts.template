@@ -1,0 +1,7 @@
+import { LitElement, html } from "lit";
+import { customElement } from "lit/decorators.js";
+
+@customElement("<%= name %>")
+export class <%= camelcase(name) %> extends LitElement {
+  render = () => html`<%= camelcase(name) %>`;
+}

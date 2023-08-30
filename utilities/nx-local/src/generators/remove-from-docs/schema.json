@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "remove-from-docs",
+  "title": "Remove from docs",
+  "description": "Removes a local package from the docs app.",
+  "type": "object",
+  "properties": {
+    "package": {
+      "type": "string",
+      "description": "",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "Which package do you want to remove from docs?"
+    }
+  },
+  "required": ["package"]
+}

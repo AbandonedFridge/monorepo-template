@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "lit",
+  "title": "Lit component generator",
+  "description": "Generates a new lit component in packages and calls add-to-docs.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What would you like to name your component?"
+    }
+  },
+  "required": ["name"]
+}

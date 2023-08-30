@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "update-shared-json",
+  "title": "Update shared package.json properties",
+  "description": "Updates shared package.json properties. Updates dependencies, but won't delete removed ones.",
+  "type": "object",
+  "properties": {},
+  "required": []
+}

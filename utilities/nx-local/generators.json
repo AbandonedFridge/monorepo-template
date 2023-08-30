@@ -1,0 +1,34 @@
+{
+  "generators": {
+    "add-to-docs": {
+      "factory": "./src/generators/add-to-docs/generator",
+      "schema": "./src/generators/add-to-docs/schema.json",
+      "description": "Installs package in docs and generates import helpers to sidestep out-of-root import issues."
+    },
+    "regenerate-lockfile": {
+      "factory": "./src/generators/regenerate-lockfile/generator",
+      "schema": "./src/generators/regenerate-lockfile/schema.json",
+      "description": "Deletes and regenerates lockfiles."
+    },
+    "lit": {
+      "factory": "./src/generators/lit/generator",
+      "schema": "./src/generators/lit/schema.json",
+      "description": "Generates a lit component package. Chains to add-to-docs."
+    },
+    "remove-from-docs": {
+      "factory": "./src/generators/remove-from-docs/generator",
+      "schema": "./src/generators/remove-from-docs/schema.json",
+      "description": "Removes package and helpers from docs."
+    },
+    "rm": {
+      "factory": "./src/generators/rm/generator",
+      "schema": "./src/generators/rm/schema.json",
+      "description": "Removes package files. Chains to remove-from-docs."
+    },
+    "update-shared-json": {
+      "factory": "./src/generators/update-shared-json/generator",
+      "schema": "./src/generators/update-shared-json/schema.json",
+      "description": "Updates shared package.json properties from values in root and docs."
+    }
+  }
+}

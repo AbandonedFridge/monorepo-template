@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "add-to-docs",
+  "title": "Add to docs",
+  "description": "Adds a package to the docs app and generates an import helper.",
+  "type": "object",
+  "properties": {
+    "package": {
+      "type": "string",
+      "description": "Name of package to generate without namespace.",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "Which package do you want to add to docs?",
+      "x-dropdown": "projects"
+    },
+    "namespace": {
+      "type": "string",
+      "description": "Optional namespace to generate package in. Should start with @. i.e. @abandonedfridge",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    }
+  },
+  "required": ["package"]
+}
