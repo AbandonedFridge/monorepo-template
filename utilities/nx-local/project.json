@@ -1,5 +1,5 @@
 {
-  "name": "local-plugin",
+  "name": "nx-local",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "utilities/nx-local/src",
   "projectType": "library",

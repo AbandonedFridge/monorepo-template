@@ -17,16 +17,16 @@ export async function addToDocsGenerator(
     console.log(`${projectRoot} doesn't exist. Aborting.`);
     return;
   }
-  addDependenciesToPackageJson(tree, { [options.package]: "*" }, {}, 'docs/package.json');
+  addDependenciesToPackageJson(tree, { [options.package]: '*' }, {}, 'docs/package.json');
   generateFiles(tree, path.join(__dirname, 'files'), 'docs', { ...options });
   await formatFiles(tree);
   return () => {
     installPackagesTask(tree, true);
     console.log('----------------------------------------------------------------------------------------------------');
     console.log(`${options.package} added to docs.`);
-    console.log(`If the dev server is already running, you'll need to restart it.`);
+    console.log('If the dev server is already running, you\'ll need to restart it.');
     console.log('----------------------------------------------------------------------------------------------------');
-  }
+  };
 }
 
 export default addToDocsGenerator;

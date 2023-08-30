@@ -1,4 +1,4 @@
-import { Tree, readJson } from '@nx/devkit'
+import { Tree, readJson } from '@nx/devkit';
 
 export const getSharedJson = (tree: Tree) => {
   const rootJson = readJson(tree, 'package.json');
@@ -9,4 +9,4 @@ export const getSharedJson = (tree: Tree) => {
     repository: rootJson.repository,
     bugs: rootJson.bugs
   });
-}
+};

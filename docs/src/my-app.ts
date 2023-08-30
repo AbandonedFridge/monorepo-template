@@ -1,8 +1,8 @@
-import { LitElement, TemplateResult, css, html, nothing } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { LitElement, TemplateResult, css, html, nothing } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
 import page from 'page';
 
-@customElement("my-app")
+@customElement('my-app')
 export class MyApp extends LitElement {
   @state() private template: TemplateResult | null = null;
 
@@ -15,8 +15,8 @@ export class MyApp extends LitElement {
     });
     page('/packages/:name', async (ctx) => {
       try {
-      const pkg = await import(`./importers/${ctx.params.name}.js`);
-      this.template = pkg.template;
+        const pkg = await import(`./importers/${ctx.params.name}.js`);
+        this.template = pkg.template;
       } catch (error) {
         await import ('./components/error-404.js');
         this.template = html`<error-404>${ctx.params.name}</error-404>`;

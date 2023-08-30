@@ -19,7 +19,6 @@ export async function litGenerator(
 ) {
   const projectRoot = `packages/${options.name}`;
   const rootJson = readJson(tree, 'package.json');
-  const docsJson = readJson(tree, 'docs/package.json');
   const namespace = rootJson.namespace || null;
   addProjectConfiguration(tree, options.name, {
     root: projectRoot,
@@ -35,21 +34,21 @@ export async function litGenerator(
 
   const newPackage = {
     name: [namespace, options.name].filter(o => !!o).join('/'),
-    description: "A lit component",
-    version: "0.0.0",
+    description: 'A lit component',
+    version: '0.0.0',
     main: `lib/${options.name}.js`,
     types: `lib/${options.name}.d.ts`,
     files: [
-      "./docs",
-      "./lib",
-      "./src"
+      './docs',
+      './lib',
+      './src'
     ],
     peerDependencies: {
       ...rootJson.dependencies
     },
     scripts: {
-      "build": "tsc",
-      "build:watch": "tsc --watch"
+      'build': 'tsc',
+      'build:watch': 'tsc --watch'
     },
     ...getSharedJson(tree)
   };
@@ -57,10 +56,10 @@ export async function litGenerator(
   writeJson(tree, `${projectRoot}/package.json`, newPackage);
   await formatFiles(tree);
 
-  const callback = await addToDocsGenerator(tree, { package: options.name, namespace: namespace })
+  const callback = await addToDocsGenerator(tree, { package: options.name, namespace: namespace });
   return () => {
     callback?.();
-  }
+  };
 }
 
 export default litGenerator;

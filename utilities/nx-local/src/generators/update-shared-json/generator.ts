@@ -8,6 +8,7 @@ import { getSharedJson } from '../../shared/get-shared-json';
 
 export async function updateSharedJsonGenerator(
   tree: Tree,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _options: UpdateSharedJsonGeneratorSchema
 ) {
   const packages = tree.children('packages');
@@ -17,7 +18,6 @@ export async function updateSharedJsonGenerator(
   }
   
   const rootJson = readJson(tree, 'package.json');
-  const docsJson = readJson(tree, 'docs/package.json');
 
   packages.map(pkg => updateJson(tree, `packages/${pkg}/package.json`, packageJson => ({
     ...packageJson,
@@ -27,7 +27,7 @@ export async function updateSharedJsonGenerator(
       ...rootJson.dependencies
     },
   })));
-  updateJson(tree, `docs/package.json`, packageJson => ({
+  updateJson(tree, 'docs/package.json', packageJson => ({
     ...packageJson,
     ...getSharedJson(tree),
     dependencies: {

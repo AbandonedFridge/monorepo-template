@@ -21,7 +21,7 @@ export async function rmGenerator(
   const callback = await removeFromDocsGenerator(tree, { package: options.name });
   return () => {
     callback?.();
-  }
+  };
 }
 
 export default rmGenerator;
