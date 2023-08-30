@@ -1,0 +1,19 @@
+{
+  "name": "docs",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "docs/src",
+  "projectType": "app",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "docs/**/*.ts",
+          "docs/package.json"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
