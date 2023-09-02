@@ -54,10 +54,32 @@ export async function litGenerator(
   };
 
   writeJson(tree, `${projectRoot}/package.json`, newPackage);
+
+  const newProject = {
+    'name': options.name,
+    '$schema': '../node_modules/nx/schemas/project-schema.json',
+    'projectType': 'library',
+    'targets': {
+      'lint': {
+        'executor': '@nx/linter:eslint',
+        'outputs': ['{options.outputFile}'],
+        'options': {
+          'lintFilePatterns': [
+            `${projectRoot}/**/*.ts`,
+            `${projectRoot}/package.json`
+          ]
+        }
+      }
+    },
+    'tags': []
+  };
+  writeJson(tree, `${projectRoot}/project.json`, newProject);
+
   await formatFiles(tree);
 
   const callback = await addToDocsGenerator(tree, { package: options.name, namespace: namespace });
   return () => {
+    console.log('Remember to restart dev server or run npm build');
     callback?.();
   };
 }
