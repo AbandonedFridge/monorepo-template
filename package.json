@@ -35,7 +35,7 @@
     "utilities/*"
   ],
   "scripts": {
-    "start": "nx run-many -t dev --parallel=4",
+    "start": "nx run-many -t start --parallel=4",
     "add:lit": "nx generate lit",
     "rm": "nx generate rm"
   },

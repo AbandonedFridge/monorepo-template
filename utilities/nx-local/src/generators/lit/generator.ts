@@ -48,7 +48,8 @@ export async function litGenerator(
     },
     scripts: {
       'build': 'tsc',
-      'build:watch': 'tsc --watch'
+      'build:watch': 'tsc --watch',
+      'start': 'npm run build:watch'
     },
     ...getSharedJson(tree)
   };

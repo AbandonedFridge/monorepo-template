@@ -1,7 +1,6 @@
 {
   "name": "docs",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "docs/src",
   "projectType": "app",
   "targets": {
     "lint": {

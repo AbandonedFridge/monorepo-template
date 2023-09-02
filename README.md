@@ -17,7 +17,7 @@
 
 ## Commands
 
-- `npm start` - Starts the repo up for development using the `build` command in all apps and packages. NX will first look for `build` in package.json then in project.json.
+- `npm start` - Starts the repo up for development using the `start` command in all apps and packages. NX will first look for `start` in package.json then in project.json.
 - `npm run add:<type> <package-name>` - Runs `nx g <type> <package-name>`
   -- Currently the only available type is `lit`.
 - `npm run rm <package-name>` - Runs `nx g rm <package-name>`

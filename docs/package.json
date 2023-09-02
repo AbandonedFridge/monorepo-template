@@ -19,6 +19,6 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "wds": "wds",
-    "dev": "run-p -r build:watch wds"
+    "start": "run-p -r build:watch wds"
   }
 }
