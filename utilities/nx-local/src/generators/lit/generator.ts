@@ -36,8 +36,8 @@ export async function litGenerator(
     name: [namespace, options.name].filter(o => !!o).join('/'),
     description: 'A lit component',
     version: '0.0.0',
-    main: `lib/${options.name}.js`,
-    types: `lib/${options.name}.d.ts`,
+    main: 'lib/index.js',
+    types: 'lib/index.d.ts',
     files: [
       './docs',
       './lib',
