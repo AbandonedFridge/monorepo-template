@@ -1,4 +1,0 @@
-import { html } from "lit";
-
-export * from '<%= package %>';
-export const template = html`<<%= package %>></<%= package %>`;
