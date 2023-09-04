@@ -1,6 +1,10 @@
 import { LitElement, TemplateResult, css, html, nothing } from 'lit';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { customElement, state } from 'lit/decorators.js';
 import page from 'page';
+import packageList from './packages.json' assert { type: 'json' };
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 
 @customElement('my-app')
 export class MyApp extends LitElement {
@@ -13,11 +17,16 @@ export class MyApp extends LitElement {
       await import('./components/home-page.js');
       this.template = html`<home-page></home-page>`;
     });
+
     page('/packages/:name', async (ctx) => {
       try {
-        const pkg = await import(`./importers/${ctx.params.name}.js`);
-        this.template = pkg.template;
+        const module = await import(`./importers/${ctx.params.name}.js`);
+        const md = await (await fetch(`${module.Path.replace('/lib/index.js',`/docs/${ctx.params.name}.md`)}`)).text();
+        const parsedHtml = DOMPurify.sanitize(marked.parse(md), {ADD_TAGS: [ctx.params.name]});
+        console.log(parsedHtml);
+        this.template = html`${unsafeHTML(parsedHtml)}`;
       } catch (error) {
+        console.error(error);
         await import ('./components/error-404.js');
         this.template = html`<error-404>${ctx.params.name}</error-404>`;
       }
@@ -57,6 +66,7 @@ export class MyApp extends LitElement {
       <h1>Docs</h1>
     </header>
     <app-navigation>
+      ${packageList.map(item => html`<a href="/packages/${item}">${item}</a>`)}
     </app-navigation>
     <main>
       ${this.template ?? nothing}
