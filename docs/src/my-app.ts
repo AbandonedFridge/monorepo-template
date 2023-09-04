@@ -38,10 +38,14 @@ export class MyApp extends LitElement {
   static styles = [
     css`
       :host {
-        display: block;
-        border: 1px solid red;
+        display: grid;
+        grid: 'header header' auto
+              'nav main' auto / 2in auto;
+
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       }
       header {
+        grid-area: header;
         position: sticky;
         display: flex;
         flex-direction: row;
@@ -50,7 +54,23 @@ export class MyApp extends LitElement {
         left: 0;
         right: 0;
         height: 0.75in;
-        box-shadow: 0 0 0.1in black;
+        box-shadow: 0 0 0 black;
+        padding: 0 0.2in;
+      }
+      nav {
+        grid-area: nav;
+        display: grid;
+        grid-auto-rows: 0.5in;
+      }
+      nav > a {
+        border-bottom: 1px solid #aaa;
+        margin-left: 0.2in;
+        display: flex;
+        align-items: center;
+      }
+      main {
+        grid-area: main;
+        padding: 0 0.2in;
       }
       h1 {
         font-weight: 400;
@@ -58,16 +78,36 @@ export class MyApp extends LitElement {
         line-height: 0.5in;
         margin: 0;
       }
+      a,
+      a:active,
+      a:visited {
+        color: rgba(85,119,204,1);
+        text-decoration: none;
+        position:relative;
+      }
+      a::after {
+        content: ' ';
+        transition: left 150ms ease-in-out;
+        position:absolute;
+        top: 0;
+        bottom:0;
+        left:100%;
+        right:0;
+        border-bottom: 0.08em solid currentColor;
+      }
+      a:hover::after {
+        left:0;
+      }
     `
   ];
 
   render = () => html`
     <header>
-      <h1>Docs</h1>
+      <h1><a href="/">Docs</a></h1>
     </header>
-    <app-navigation>
+    <nav>
       ${packageList.map(item => html`<a href="/packages/${item}">${item}</a>`)}
-    </app-navigation>
+    </nav>
     <main>
       ${this.template ?? nothing}
     </main>
