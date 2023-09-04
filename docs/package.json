@@ -3,6 +3,7 @@
   "description": "App presenting documentation and examples for library packages",
   "private": true,
   "dependencies": {
+    "@justinribeiro/code-block": "^2.0.0",
     "@types/dompurify": "^3.0.2",
     "@types/marked": "^5.0.1",
     "dompurify": "^3.0.5",

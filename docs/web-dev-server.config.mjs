@@ -1,9 +1,13 @@
+import pathCorrection from './middleware/pathCorrection.mjs';
+
 export default {
-  open: "/",
+  open: '/',
   watch: true,
   nodeResolve: {
     exportConditions: ['browser', 'development'],
   },
-  appIndex: "index.html",
-  plugins: [],
+  appIndex: 'index.html',
+  rootDir: '../',
+  debug: true,
+  middleware: [ pathCorrection ]
 };

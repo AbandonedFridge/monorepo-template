@@ -1,12 +1,11 @@
 import {
   formatFiles,
-  generateFiles,
   Tree,
   installPackagesTask,
   addDependenciesToPackageJson,
   writeJson,
+  readJson,
 } from '@nx/devkit';
-import * as path from 'path';
 import { AddToDocsGeneratorSchema } from './schema';
 
 export async function addToDocsGenerator(
@@ -18,9 +17,8 @@ export async function addToDocsGenerator(
     console.log(`${projectRoot} doesn't exist. Aborting.`);
     return;
   }
-  const packages = tree.children('packages');
-  addDependenciesToPackageJson(tree, { [options.package]: '*' }, {}, 'docs/package.json');
-  generateFiles(tree, path.join(__dirname, 'files'), 'docs', { ...options });
+  const packages = tree.children('packages').map(o => readJson(tree, `packages/${o}/package.json`).name);
+  addDependenciesToPackageJson(tree, { [readJson(tree, `packages/${options.package}/package.json`).name]: '*' }, {}, 'docs/package.json');
   writeJson(tree, 'docs/src/packages.json', packages);
   await formatFiles(tree);
   return () => {
