@@ -31,11 +31,11 @@ const renderer = {
     const lang = (infostring || '').match(/^\S*/)?.[0];
     code = code.replace(/\n$/, '') + '\n';
     if (!lang) {
-      return '<code-block>'
+      return '<code-block language="typescript">'
           + (escaped ? code : escape(code, true))
           + '</code-block>\n';
     }
-    return '<code-block class="language-'
+    return '<code-block language="'
         + escape(lang)
         + '">'
         + (escaped ? code : escape(code, true))

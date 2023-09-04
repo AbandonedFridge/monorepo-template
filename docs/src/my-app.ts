@@ -25,8 +25,7 @@ export class MyApp extends LitElement {
       try {
         await import (`/node_modules/${ctx.params.name}/lib/${ctx.params.name}.js`);
         const md = await (await fetch(`/node_modules/${ctx.params.name}/docs/${ctx.params.name}.md`)).text();
-        const parsedHtml = DOMPurify.sanitize(marked.parse(md), {ADD_TAGS: [ctx.params.name, 'code-block']});
-        console.log(parsedHtml);
+        const parsedHtml = DOMPurify.sanitize(marked.parse(md), {ADD_TAGS: [ctx.params.name, 'code-block'], ADD_ATTR: ['language']});
         this.template = html`${unsafeHTML(parsedHtml)}`;
       } catch (error) {
         console.error(error);
@@ -39,8 +38,7 @@ export class MyApp extends LitElement {
       try {
         await import (`/node_modules/${ctx.params.namespace}/${ctx.params.name}/lib/${ctx.params.name}.js`);
         const md = await (await fetch(`/node_modules/${ctx.params.namespace}/${ctx.params.name}/docs/${ctx.params.name}.md`)).text();
-        const parsedHtml = DOMPurify.sanitize(marked.parse(md), {ADD_TAGS: [ctx.params.name, 'code-block']});
-        console.log(parsedHtml);
+        const parsedHtml = DOMPurify.sanitize(marked.parse(md), {ADD_TAGS: [ctx.params.name, 'code-block'], ADD_ATTR: ['language']});
         this.template = html`${unsafeHTML(parsedHtml)}`;
       } catch (error) {
         console.error(error);
