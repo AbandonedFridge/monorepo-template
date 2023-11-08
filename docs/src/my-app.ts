@@ -47,6 +47,11 @@ export class MyApp extends LitElement {
       }
     });
 
+    page('*', async () => {
+      await import ('./components/error-404.js');
+      this.template = html`<error-404>${window.location.pathname}</error-404>`;
+    });
+
     page.start();
   }
 
