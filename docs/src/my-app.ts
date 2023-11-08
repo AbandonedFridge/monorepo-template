@@ -1,17 +1,20 @@
 import { LitElement, TemplateResult, css, html, nothing } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, query, state } from 'lit/decorators.js';
 import page from 'page';
-import packageList from './packages.json' assert { type: 'json' };
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
-import '@justinribeiro/code-block';
 
-import './marked/code-block.js';
+import hljs from 'highlight.js/lib/core';
 
 @customElement('my-app')
 export class MyApp extends LitElement {
   @state() private template: TemplateResult | null = null;
+  @state() private packages: string[] = [];
+  @state() private themes: string[] = [];
+
+  @query('main') main!: HTMLElement;
+  @query('link') themeLink!: HTMLLinkElement;
 
   constructor() {
     super();
@@ -23,12 +26,8 @@ export class MyApp extends LitElement {
 
     page('/packages/:name', async (ctx) => {
       try {
-        await import (`/node_modules/${ctx.params.name}/lib/${ctx.params.name}.js`);
-        const md = await (await fetch(`/node_modules/${ctx.params.name}/docs/${ctx.params.name}.md`)).text();
-        const parsedHtml = DOMPurify.sanitize(marked.parse(md), {ADD_TAGS: [ctx.params.name, 'code-block'], ADD_ATTR: ['language']});
-        this.template = html`${unsafeHTML(parsedHtml)}`;
+        await this.#loadPackage(ctx.params.name);
       } catch (error) {
-        console.error(error);
         await import ('./components/error-404.js');
         this.template = html`<error-404>${ctx.params.name}</error-404>`;
       }
@@ -36,14 +35,10 @@ export class MyApp extends LitElement {
 
     page('/packages/:namespace/:name', async (ctx) => {
       try {
-        await import (`/node_modules/${ctx.params.namespace}/${ctx.params.name}/lib/${ctx.params.name}.js`);
-        const md = await (await fetch(`/node_modules/${ctx.params.namespace}/${ctx.params.name}/docs/${ctx.params.name}.md`)).text();
-        const parsedHtml = DOMPurify.sanitize(marked.parse(md), {ADD_TAGS: [ctx.params.name, 'code-block'], ADD_ATTR: ['language']});
-        this.template = html`${unsafeHTML(parsedHtml)}`;
+        await this.#loadPackage(ctx.params.name, ctx.params.namespace);
       } catch (error) {
-        console.error(error);
         await import ('./components/error-404.js');
-        this.template = html`<error-404>${ctx.params.name}</error-404>`;
+        this.template = html`<error-404>${ctx.params.namespace}/${ctx.params.name}</error-404>`;
       }
     });
 
@@ -55,7 +50,51 @@ export class MyApp extends LitElement {
     page.start();
   }
 
+  firstUpdated() {
+    this.#loadPackages();
+    this.#loadThemes();
+    this.#setTheme('atom-one-dark');
+  }
+
+  async #loadPackage(name: string, namespace?: string) {
+    await import (`/node_modules/${namespace ? `${namespace}/` : ''}${name}/lib/${name}.js`);
+    this.template = await this.#loadMarkdown(`/node_modules/${namespace ? `${namespace}/` : ''}${name}/docs/${name}.md`, name);
+    await this.updateComplete;
+    const codeBlocks = this.shadowRoot?.querySelectorAll('code');
+    Array.from(codeBlocks ?? []).map(o => hljs.highlightElement(o));
+  }
+
+  async #loadMarkdown(path: string, component: string) {
+    const md = await (await fetch(path)).text();
+    const languages = Array.from(new Set(Array.from(md.matchAll(/```([a-zA-Z0-9\\-]*)/g)).map(o => o[1] || 'javascript')));
+    await this.#loadLanguages(languages);
+    const parsedHtml = DOMPurify.sanitize(marked.parse(md), {ADD_TAGS: [component, 'code-block'], ADD_ATTR: ['language', 'theme']});
+    return html`${unsafeHTML(parsedHtml)}`;
+  }
+
+  async #loadPackages() {
+    this.packages = await (await fetch('/lib/packages.json')).json() as string[];
+  }
+  async #loadThemes() {
+    this.themes = await (await fetch('/lib/shared/themes.json')).json() as string[];
+  }
+  async #loadLanguages(languages: string[]) {
+    await Promise.all(languages.map(async (name) => {
+      try {
+        const language = await import(`/node_modules/highlight.js/lib/languages/${name}.js`);
+        hljs.registerLanguage(name, language.default);
+      } catch {
+        console.error(`No language definition found for ${name}`);
+      }
+    }));
+  }
+
+  async #setTheme(theme: string) {
+    this.themeLink.href = `/node_modules/highlight.js/styles/${theme}.css`;
+  }
+
   static styles = [
+    // theme,
     css`
       :host {
         display: grid;
@@ -118,15 +157,20 @@ export class MyApp extends LitElement {
       a:hover::after {
         left:0;
       }
+
+      code {
+        border-radius: 8px;
+      }
     `
   ];
 
   render = () => html`
+    <link rel="stylesheet" />
     <header>
       <h1><a href="/">Docs</a></h1>
     </header>
     <nav>
-      ${packageList.map(item => html`<a href="/packages/${item}">${item}</a>`)}
+      ${this.packages.map(item => html`<a href="/packages/${item}">${item}</a>`)}
     </nav>
     <main>
       ${this.template ?? nothing}
