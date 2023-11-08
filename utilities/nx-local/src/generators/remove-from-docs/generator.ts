@@ -1,6 +1,7 @@
 import {
   Tree,
   installPackagesTask,
+  readJson,
   removeDependenciesFromPackageJson,
   writeJson,
 } from '@nx/devkit';
@@ -11,8 +12,8 @@ export async function removeFromDocsGenerator(
   options: RemoveFromDocsGeneratorSchema
 ) {
   const packages = tree.children('packages');
-  removeDependenciesFromPackageJson(tree, [options.package], [], 'docs/package.json');
-  tree.delete(`docs/src/importers/${options.package}.ts`);
+  const packageName = readJson(tree, `packages/${options.package}/package.json`).name;
+  removeDependenciesFromPackageJson(tree, [packageName], [], 'docs/package.json');
   writeJson(tree, 'docs/src/packages.json', packages);
   return () => {
     installPackagesTask(tree, true);
